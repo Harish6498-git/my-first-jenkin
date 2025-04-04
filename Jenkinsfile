@@ -1,23 +1,25 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_IMAGE = 'my-app'
+    }
     stages {
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Building the project...'
-                sh 'echo "Building project..."'
+                script {
+                    docker.build(DOCKER_IMAGE)
+                }
             }
         }
-        stage('Test') {
+        stage('Push Docker Image') {
             steps {
-                echo 'Running tests...'
-                sh 'echo "Running tests..."'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the application...'
-                sh 'echo "Deploying application..."'
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                        docker.image(DOCKER_IMAGE).push()
+                    }
+                }
             }
         }
     }
 }
+
