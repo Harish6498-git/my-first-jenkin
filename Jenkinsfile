@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = 'my-app'
+        DOCKER_IMAGE = 'my-first-docker-image'
     }
     stages {
         stage('Build Docker Image') {
